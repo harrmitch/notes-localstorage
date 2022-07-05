@@ -39,17 +39,17 @@ const getAllNotes = () => {
 
 const saveNote = (noteToSave) => {
   notesDB.update((notes) => {
-    let existing = notes.find((note) => note.id == noteToSave.id);
+    let existing = notes.findIndex((note) => note.id == noteToSave.id);
 
     noteToSave.title = noteToSave.title.trim();
     noteToSave.body = noteToSave.body.trim();
     let saveNote = { ...noteToSave, updated: new Date().toLocaleString() };
 
-    if (existing) {
-      existing = saveNote;
+    if (existing != -1) {
+      notes[existing] = saveNote;
       notes = sortNotes(notes);
     } else {
-      notes = sortNotes([...notes, saveNote]);
+      notes = [saveNote, ...notes];
     }
     selected.set(saveNote);
     localStorage.setItem("notesDB", JSON.stringify(notes));
