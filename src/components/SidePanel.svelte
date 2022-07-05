@@ -3,8 +3,7 @@
 
   import AddBtn from "./AddBtn.svelte";
   import NoteCard from "./NoteCard.svelte";
-  import { notesDB, saveNote, deleteNote } from "../NotesAPI";
-  import { onMount } from "svelte";
+  import { notesDB, saveNote } from "../NotesAPI";
 
   const newNoteHandler = () => {
     saveNote({ id: uuid(), title: "New Note", body: "Begin noting..." });
