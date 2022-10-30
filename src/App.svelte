@@ -9,6 +9,9 @@
 
   onMount(() => {
     getAllNotes();
+    alert(
+      "Instruction:\nCLICK 'New notes' to ADD notes.\nCLICK OUTSIDE the text editor to SAVE.\nCLICK on any note in the panel to EDIT.\nDOUBLE CLICK on any note in the panel to DELETE."
+    );
   });
 </script>
 
