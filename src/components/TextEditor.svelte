@@ -1,26 +1,28 @@
 <script>
-  import { selected, saveNote } from "../NotesAPI";
+  import { getSelected, saveNote } from "../notesApi.svelte.js";
   const handleBlur = () => {
-    saveNote($selected);
+    saveNote(getSelected());
   };
 </script>
 
 <div class="text-editor">
-  {#if $selected}
+  {#if getSelected()}
     <input
-      on:blur={handleBlur}
+      onblur={handleBlur}
       class="title"
       type="text"
       placeholder="New Note"
-      bind:value={$selected.title}
+      value={getSelected().title}
+      oninput={(e) => (getSelected().title = e.target.value)}
     />
     <textarea
-      on:blur={handleBlur}
+      onblur={handleBlur}
       class="body"
       cols="30"
       rows="10"
-      bind:value={$selected.body}
-    />
+      value={getSelected().body}
+      oninput={(e) => (getSelected().body = e.target.value)}
+></textarea>
   {/if}
 </div>
 

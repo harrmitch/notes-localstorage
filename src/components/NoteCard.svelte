@@ -1,30 +1,30 @@
 <script>
-  import { deleteNote, selected as selectedNote } from "../NotesAPI";
+  import { deleteNote, getSelected, setSelected } from "../notesApi.svelte.js";
 
-  export let note;
+  let { note } = $props();
 
-  let selected = false;
-  $: selected = $selectedNote && $selectedNote.id == note.id ? true : false;
+  const selected = () => getSelected() && getSelected().id == note.id ? true : false;
 
   const handleDelete = () => {
     if (window.confirm("Do you really want to delete this note?")) {
       deleteNote(note.id);
     }
   };
-  const handleClick = (e) => {
-    selected = true;
-    selectedNote.set(note);
+  const handleClick = () => {
+    setSelected(note)
   };
 </script>
 
-<div
-  class={selected ? "selected card" : "card"}
-  on:click={handleClick}
-  on:dblclick={handleDelete}
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<div 
+  class={selected() ? "selected card" : "card"}
+  onclick={handleClick}
+  ondblclick={handleDelete}
 >
-  <p class={selected ? "selected title" : "title"}>{note.title}</p>
-  <p class={selected ? "selected body" : "body"}>{note.body}</p>
-  <p class={selected ? "selected updated" : "updated"}>
+  <p class={selected() ? "selected title" : "title"}>{note.title}</p>
+  <p class={selected() ? "selected body" : "body"}>{note.body}</p>
+  <p class={selected() ? "selected updated" : "updated"}>
     {new Date(note.updated).toLocaleString()}
   </p>
 </div>
@@ -51,7 +51,7 @@
     display: -webkit-box;
     overflow: hidden !important;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
+    line-clamp: 2;
     margin: 0;
     border: 0;
   }

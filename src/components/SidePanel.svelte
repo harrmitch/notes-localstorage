@@ -3,7 +3,7 @@
 
   import AddBtn from "./AddBtn.svelte";
   import NoteCard from "./NoteCard.svelte";
-  import { notesDB, saveNote } from "../NotesAPI";
+  import { getNotesDB, saveNote } from "../notesApi.svelte.js";
 
   const newNoteHandler = () => {
     saveNote({ id: uuid(), title: "New Note", body: "Begin noting..." });
@@ -11,8 +11,8 @@
 </script>
 
 <div class="side-panel">
-  <AddBtn on:new-note={newNoteHandler} />
-  {#each $notesDB as note}
+  <AddBtn onNewNote={newNoteHandler} />
+  {#each getNotesDB() as note}
     <NoteCard {note} />
   {/each}
 </div>

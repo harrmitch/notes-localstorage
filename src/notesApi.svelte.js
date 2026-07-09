@@ -1,7 +1,8 @@
-import { writable } from "svelte/store";
+let notesDB = $state([]);
+let selected = $state(null);
 
-let notesDB = writable([]);
-let selected = writable(null);
+const getNotesDB = () => notesDB;
+const getSelected = () => selected;
 
 const sortNotes = (notes) => {
   return notes.sort(
@@ -33,37 +34,37 @@ const getAllNotes = () => {
 
   const fetchedNotes = JSON.parse(localStorage.getItem("notesDB") || "[]");
 
-  notesDB.set(sortNotes(fetchedNotes));
-  selected.set(fetchedNotes ? fetchedNotes[0] : null);
+  notesDB = sortNotes(fetchedNotes);
+  selected = fetchedNotes ? fetchedNotes[0] : null;
 };
 
 const saveNote = (noteToSave) => {
-  notesDB.update((notes) => {
-    let existing = notes.findIndex((note) => note.id == noteToSave.id);
+  const existing = notesDB.findIndex((note) => note.id == noteToSave.id);
 
-    noteToSave.title = noteToSave.title.trim();
-    noteToSave.body = noteToSave.body.trim();
-    let saveNote = { ...noteToSave, updated: new Date().toLocaleString() };
+  noteToSave.title = noteToSave.title.trim();
+  noteToSave.body = noteToSave.body.trim();
+  const saveNote = { ...noteToSave, updated: new Date().toLocaleString() };
 
-    if (existing != -1) {
-      notes[existing] = saveNote;
-      notes = sortNotes(notes);
-    } else {
-      notes = [saveNote, ...notes];
-    }
-    selected.set(saveNote);
-    localStorage.setItem("notesDB", JSON.stringify(notes));
-    return notes;
-  });
+  if (existing != -1) {
+    notesDB[existing] = saveNote;
+    notesDB = sortNotes(notesDB);
+  } else {
+    notesDB = [saveNote, ...notesDB];
+  }
+
+  selected = saveNote;
+  localStorage.setItem("notesDB", JSON.stringify($state.snapshot(notesDB)));
 };
 
 const deleteNote = (noteId) => {
-  notesDB.update((notes) => {
-    notes = notes.filter((note) => note.id != noteId);
-    localStorage.setItem("notesDB", JSON.stringify(notes));
-    selected.set(notes ? notes[0] : null);
-    return notes;
-  });
+  const notes = notesDB.filter((note) => note.id != noteId);
+  localStorage.setItem("notesDB", JSON.stringify(notes));
+  selected = notes ? notes[0] : null;
+  notesDB = notes;
 };
 
-export { notesDB, getAllNotes, saveNote, deleteNote, selected };
+const setSelected = (note) => {
+  selected = note;
+}
+
+export { getNotesDB, getAllNotes, saveNote, deleteNote, getSelected, setSelected };

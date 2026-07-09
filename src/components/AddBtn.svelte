@@ -1,10 +1,8 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
-  const dispatch = createEventDispatcher();
+  const { onNewNote } = $props();
 </script>
 
-<button on:click={() => dispatch("new-note")}>Add note</button>
+<button onclick={onNewNote}>Add note</button>
 
 <style>
   button {
