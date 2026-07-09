@@ -12,16 +12,20 @@
       class="title"
       type="text"
       placeholder="New Note"
-      value={getSelected().title}
-      oninput={(e) => (getSelected().title = e.target.value)}
+      bind:value={
+        () => getSelected().title,
+        (v) => getSelected().title = v
+      }
     />
     <textarea
       onblur={handleBlur}
       class="body"
       cols="30"
       rows="10"
-      value={getSelected().body}
-      oninput={(e) => (getSelected().body = e.target.value)}
+      bind:value={
+        () => getSelected().body,
+        (v) => getSelected().body = v
+      }
 ></textarea>
   {/if}
 </div>
